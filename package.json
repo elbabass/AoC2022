@@ -1,8 +1,18 @@
 {
+  "scripts": {
+    "test": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha -r ts-node/register 'tests/**/*.ts'"
+  },
   "dependencies": {
+    "chevrotain": "^10.4.2",
     "typescript": "^4.9.3"
   },
   "devDependencies": {
-    "mocha": "^10.1.0"
+    "@testdeck/mocha": "^0.3.2",
+    "@types/chai": "^4.3.4",
+    "@types/mocha": "^10.0.1",
+    "approvals": "^6.0.0",
+    "chai": "^4.3.7",
+    "mocha": "^10.1.0",
+    "ts-node": "^10.9.1"
   }
 }

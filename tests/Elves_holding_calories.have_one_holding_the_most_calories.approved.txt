@@ -1,0 +1,18 @@
+For example, suppose the Elves finish writing their items' Calories and end up with the following list:
+------
+1000
+2000
+3000
+
+4000
+
+5000
+6000
+
+7000
+8000
+9000
+
+10000
+------
+In case the Elves get hungry and need extra snacks, they need to know which Elf to ask: they’d like to know how many Calories are being carried by the Elf carrying the most Calories. In the example above, this is 24000 (carried by the Elf number 4)
