@@ -102,12 +102,16 @@ export class CaloriesCounter {
         this.ast = toAstVisitor.visit(cstOutput)
     }
 
-    mostCaloriesBag() : number {
+    mostCaloriesBag() {
         const bags =
             this.ast.bags.map(
                 (bag) =>
                     bag.items.reduce(
                         (acc, item) => acc + item))
-        return bags.reduce((acc, calories) => (acc < calories) ? calories : acc)
+        return bags.reduce((acc, current, rank) =>
+            (acc.total < current) ? {
+                total: current,
+                rank: rank + 1
+            } : acc, {total: 0, rank: -1})
     }
 }
