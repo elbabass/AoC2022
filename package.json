@@ -3,6 +3,7 @@
     "test": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha -r ts-node/register 'tests/**/*.ts'"
   },
   "dependencies": {
+    "chevrotain": "^10.4.2",
     "typescript": "^4.9.3"
   },
   "devDependencies": {
