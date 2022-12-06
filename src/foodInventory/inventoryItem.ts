@@ -1,4 +1,4 @@
-export class InventoryItems {
+export class InventoryItem {
     total: number
     rank: number
 
@@ -7,8 +7,8 @@ export class InventoryItems {
         this.rank = rank
     }
 
-    static compare(a: InventoryItems, b: InventoryItems): number {
-        return a.total - b.total
+    static compare(a: InventoryItem, b: InventoryItem): number {
+        return b.total - a.total
     }
 }
 
@@ -34,6 +34,6 @@ export class Inventory {
     toRankedCalories() {
         return this.bags.map(
             (bag, index) =>
-                new InventoryItems(bag.getTotalCalories(), index + 1))
+                new InventoryItem(bag.getTotalCalories(), index + 1))
     }
 }

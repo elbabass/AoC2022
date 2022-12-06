@@ -1,5 +1,5 @@
 import {CstNode} from "chevrotain";
-import {Bag, Inventory} from "./inventoryItems";
+import {Bag, Inventory} from "./inventoryItem";
 
 const {createToken, Lexer, CstParser} = require("chevrotain")
 
