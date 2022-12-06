@@ -1,6 +1,6 @@
 require('approvals').mocha()
-import {CaloriesCounter} from '../src/caloriesCounter'
-import { readFileSync } from 'fs';
+import {CaloriesCounter} from '../src/foodInventory/caloriesCounter'
+import {readFileSync} from 'fs';
 
 describe('Elves holding calories', () => {
     function buildCaloriesStory(itemCaloriesWritings: string, mostCalories: { total: number; rank: number }) {
