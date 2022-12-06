@@ -1,0 +1,6 @@
+--- Part Two ---
+By the time you calculate the answer to the Elves' question, they've already realized that the Elf carrying the most Calories of food might eventually run out of snacks.
+
+To avoid this unacceptable situation, the Elves would instead like to know the total Calories carried by the top three Elves carrying the most Calories. That way, even if one of those Elves runs out of snacks, they still have two backups.
+
+ In the example above, the top three Elves are the undefined Elf (with 68442 Calories), then the undefined Elf (with 68218 Calories), then the undefined Elf (with 68177 Calories). The sum of the Calories carried by these three elves is 204837.
