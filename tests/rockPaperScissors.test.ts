@@ -1,7 +1,13 @@
+import {Paper, Rock, Scissors, Shot} from "../src/rockPaperScissors";
+
 require('approvals').mocha(__dirname + '/day2')
 describe('Elves playing Rock Paper Scissors', () => {
     it('can read strategy to compute score', function () {
-        const description = day2Introduction + day2ExampleExplained(day2Example)
+        const player1Shots = Array<Shot>(new Rock(), new Paper(), new Scissors());
+        const player2Shots = Array<Shot>(new Paper(), new Rock(), new Scissors());
+        const description =
+            day2Introduction +
+            day2ExampleExplained(day2Example, player1Shots, player2Shots)
         this.verify(description);
     })
 })
@@ -10,7 +16,7 @@ const day2Example = "A Y\n" +
     "B X\n" +
     "C Z"
 
-const day2ExampleExplained = (input: string) => {
+const day2ExampleExplained = (input: string, opponentShots: Array<Shot>, myShots: Array<Shot>) => {
     return "For example, suppose you were given the following strategy guide:\n" +
         "\n-----" +
         "\n" +
@@ -19,9 +25,17 @@ const day2ExampleExplained = (input: string) => {
         "\n" +
         "This strategy guide predicts and recommends the following:\n" +
         "\n" +
-        "In the first round, your opponent will choose Rock (A), and you should choose Paper (Y). This ends in a win for you with a score of 8 (2 because you chose Paper + 6 because you won).\n" +
-        "In the second round, your opponent will choose Paper (B), and you should choose Rock (X). This ends in a loss for you with a score of 1 (1 + 0).\n" +
-        "The third round is a draw with both players choosing Scissors, giving you a score of 3 + 3 = 6.\n" +
+        "In the first round, your opponent will choose" +
+        ` ${opponentShots[0].getName()} (${opponentShots[0].getPlayerOneShotEncoding()}),` +
+        ` and you should choose ${myShots[0].getName()} (${myShots[0].getPlayerTwoShotEncoding()}).` +
+        " This ends in a win for you with a score of 8" +
+        ` (${myShots[0].getScore()} because you chose ${myShots[0].getName()} + 6 because you won).\n` +
+        "In the second round, your opponent will choose" +
+        ` ${opponentShots[1].getName()} (${opponentShots[1].getPlayerOneShotEncoding()}),` +
+        ` and you should choose ${myShots[1].getName()} (${myShots[1].getPlayerTwoShotEncoding()}).` +
+        ` This ends in a loss for you with a score of 1 (${myShots[1].getScore()} + 0).\n` +
+        `The third round is a draw with both players choosing ${opponentShots[2].getName()},` +
+        ` giving you a score of ${myShots[2].getScore()} + 3 = 6.\n` +
         "In this example, if you were to follow the strategy guide, you would get a total score of 15 (8 + 1 + 6)."
 }
 
