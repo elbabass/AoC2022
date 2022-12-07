@@ -29,13 +29,13 @@ const day2ExampleExplained = (input: string, opponentShots: Array<Shot>, myShots
         ` ${opponentShots[0].getName()} (${opponentShots[0].getPlayerOneShotEncoding()}),` +
         ` and you should choose ${myShots[0].getName()} (${myShots[0].getPlayerTwoShotEncoding()}).` +
         " This ends in a win for you with a score of 8" +
-        ` (${myShots[0].getScore()} because you chose ${myShots[0].getName()} + 6 because you won).\n` +
+        ` (${myShots[0].getScore()} because you chose ${myShots[0].getName()} + ${myShots[0].versus(opponentShots[0])} because you won).\n` +
         "In the second round, your opponent will choose" +
         ` ${opponentShots[1].getName()} (${opponentShots[1].getPlayerOneShotEncoding()}),` +
         ` and you should choose ${myShots[1].getName()} (${myShots[1].getPlayerTwoShotEncoding()}).` +
-        ` This ends in a loss for you with a score of 1 (${myShots[1].getScore()} + 0).\n` +
+        ` This ends in a loss for you with a score of 1 (${myShots[1].getScore()} + ${myShots[1].versus(opponentShots[1])}).\n` +
         `The third round is a draw with both players choosing ${opponentShots[2].getName()},` +
-        ` giving you a score of ${myShots[2].getScore()} + 3 = 6.\n` +
+        ` giving you a score of ${myShots[2].getScore()} + ${myShots[2].versus(opponentShots[2])} = 6.\n` +
         "In this example, if you were to follow the strategy guide, you would get a total score of 15 (8 + 1 + 6)."
 }
 
