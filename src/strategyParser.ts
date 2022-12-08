@@ -37,9 +37,19 @@ class StrategyParser extends CstParser {
 const strategyParser = new StrategyParser()
 const BaseStrategyVisitor = strategyParser.getBaseCstVisitorConstructor()
 
-class StrategyVisitor extends BaseStrategyVisitor {
-    myShotMapping: Record<string, Shot> = {'X': new Rock(), 'Y': new Paper(), 'Z': new Scissors()}
+class StrategyBookVisitor extends BaseStrategyVisitor {
     opponentShotMapping: Record<string, Shot> = {'A': new Rock(), 'B': new Paper(), 'C': new Scissors()}
+
+    strategy(ctx: any) {
+        const map = ctx.round.map((r: any) => this.round(r));
+        return new Strategy(
+            ...map
+        )
+    }
+}
+
+export class ShotAndShotVisitor extends StrategyBookVisitor {
+    myShotMapping: Record<string, Shot> = {'X': new Rock(), 'Y': new Paper(), 'Z': new Scissors()}
 
     constructor() {
         super()
@@ -52,28 +62,9 @@ class StrategyVisitor extends BaseStrategyVisitor {
         return new Round(myShotCode, opponentShotCode)
     }
 
-    strategy(ctx: any) {
-        const map = ctx.round.map((r: any) => this.round(r));
-        return new Strategy(
-            ...map
-        )
-    }
 }
 
-export function parseStrategy(day2Example: string) {
-    strategyParser.input = StrategyLexer.tokenize(day2Example).tokens
-    const cstOutput: CstNode = strategyParser.strategy()
-    if (strategyParser.errors.length > 0) {
-        throw Error("Sad sad panda, parsing errors detected!\n" + strategyParser.errors[0].message)
-    }
-
-    const toAstVisitor = new StrategyVisitor()
-    return toAstVisitor.visit(cstOutput)
-}
-
-class CorrectStrategyVisitor extends BaseStrategyVisitor {
-    myShotMapping: Record<string, Shot> = {'X': new Rock(), 'Y': new Paper(), 'Z': new Scissors()}
-    opponentShotMapping: Record<string, Shot> = {'A': new Rock(), 'B': new Paper(), 'C': new Scissors()}
+export class ShotAndResultVisitor extends StrategyBookVisitor {
 
     constructor() {
         super()
@@ -87,23 +78,16 @@ class CorrectStrategyVisitor extends BaseStrategyVisitor {
         const myShotCode: Shot = translateResult[ctx.children.MyShot.map((s: any) => s.image)[0]]()
         return new Round(myShotCode, opponentShotCode)
     }
-
-    strategy(ctx: any) {
-        const map = ctx.round.map((r: any) => this.round(r));
-        return new Strategy(
-            ...map
-        )
-    }
 }
 
-
-export function parseCorrectStrategy(day2Example: string) {
+function parse(day2Example: string) {
     strategyParser.input = StrategyLexer.tokenize(day2Example).tokens
     const cstOutput: CstNode = strategyParser.strategy()
     if (strategyParser.errors.length > 0) {
         throw Error("Sad sad panda, parsing errors detected!\n" + strategyParser.errors[0].message)
     }
-
-    const toAstVisitor = new CorrectStrategyVisitor()
-    return toAstVisitor.visit(cstOutput)
+    return cstOutput;
 }
+
+export const collectStrategy = (toAstVisitor: StrategyBookVisitor, day2Example: string) => toAstVisitor.visit(parse(day2Example));
+

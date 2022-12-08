@@ -1,25 +1,25 @@
 import {Strategy} from "../src/rockPaperScissors";
-import {parseCorrectStrategy, parseStrategy} from "../src/strategyParser";
+import {collectStrategy, ShotAndResultVisitor, ShotAndShotVisitor} from "../src/strategyParser";
 import {readFileSync} from "fs";
 
 require('approvals').mocha(__dirname + '/day2')
 
 describe('Elves playing Rock Paper Scissors', () => {
     it('can read strategy to compute score', function () {
-        const rounds = parseStrategy(day2Example)
+        const rounds = collectStrategy(new ShotAndShotVisitor(), day2Example)
         const description = day2Introduction + day2ExampleExplained(day2Example, rounds)
         this.verify(description);
     })
 
     it('can read correct strategy to compute score', function () {
-        const rounds = parseCorrectStrategy(day2Example)
+        const rounds = collectStrategy(new ShotAndResultVisitor(), day2Example)
         const description = day2Part2(rounds)
         this.verify(description);
     })
 
     it('can read strategy to compute score with day 2 input', function () {
         const day2Inputs = readFileSync(__dirname + "/Day2/day2.input.txt", 'utf-8')
-        const rounds = parseStrategy(day2Inputs)
+        const rounds = collectStrategy(new ShotAndShotVisitor(), day2Inputs)
         const description = day2InputExplained(day2Inputs, rounds)
         this.verify(description);
     })
