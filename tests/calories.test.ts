@@ -2,7 +2,7 @@ import {InventoryItem} from "../src/foodInventory/inventoryItem";
 import {CaloriesCounter} from '../src/foodInventory/caloriesCounter'
 import {readFileSync} from 'fs';
 
-require('approvals').mocha()
+require('approvals').mocha(__dirname + '/day1')
 
 describe('Elves holding calories', () => {
     function buildCaloriesStory(itemCaloriesWritings: string, mostCalories: InventoryItem) {
@@ -42,7 +42,7 @@ describe('Elves holding calories', () => {
         "\n" +
         "10000"
 
-    const itemCaloriesWritingsInputDay1 = readFileSync(__dirname + "/day1.input.txt", 'utf-8')
+    const itemCaloriesWritingsInputDay1 = readFileSync(__dirname + "/Day1/day1.input.txt", 'utf-8')
 
     const caloriesCounterForExample = new CaloriesCounter(itemCaloriesWritingsExample);
     const caloriesCounterForDay1 = new CaloriesCounter(itemCaloriesWritingsInputDay1);
