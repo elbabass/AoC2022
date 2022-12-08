@@ -30,3 +30,50 @@ export class Scissors extends Shot {
     getPlayerTwoShotEncoding: () => PlayerTwoShotEncoding = () => "Z"
     getScore = () => 3
 }
+
+
+export class Round {
+    private readonly _myShot: Shot;
+    private readonly _opponentShot: Shot;
+
+    constructor(me: Shot, opponent: Shot) {
+        this._myShot = me
+        this._opponentShot = opponent
+    }
+
+    get score(): number {
+        return this._myShot.getScore() +
+            this.myShot.versus(this._opponentShot)
+    }
+
+    get opponentShot(): Shot {
+        return this._opponentShot;
+    }
+
+    get myShot(): Shot {
+        return this._myShot;
+    }
+
+}
+
+export class Strategy {
+    private readonly rounds: Array<Round>;
+
+    constructor(...rounds: Round[]) {
+        this.rounds = new Array<Round>(...rounds)
+    }
+
+    get totalScore(): number {
+        return this.rounds.map(round => round.score).reduce((sum, round) => sum + round)
+    }
+
+    get opponentShots() {
+        return this.rounds.map((round) => round.opponentShot)
+    }
+
+    get myShots() {
+        return this.rounds.map((round) => round.myShot)
+    }
+
+    getRoundScore = (roundNumber: number) => this.rounds[roundNumber].score
+}
