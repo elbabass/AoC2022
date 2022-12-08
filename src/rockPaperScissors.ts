@@ -1,36 +1,75 @@
-type PlayerOneShotEncoding = "A" | "B" | "C"
-type PlayerTwoShotEncoding = "X" | "Y" | "Z"
+const enum PlayerOneShotEncoding {
+    Rock = "A",
+    Paper = "B",
+    Scissors = "C"
+}
+
+const enum PlayerTwoShotEncoding {
+    Rock = "X",
+    Paper = "Y",
+    Scissors = "Z"
+}
+
+export enum RoundResult {
+    Lose = 0,
+    Draw = 3,
+    Win = 6
+}
+
+export const translateResult = {'X': RoundResult.Lose, "Y": RoundResult.Draw, 'Z': RoundResult.Win}
 
 export abstract class Shot {
     protected abstract result: Record<string, number>
+    abstract loseAgainst: () => Shot
+    abstract winAgainst: () => Shot
+
     abstract getPlayerOneShotEncoding: () => PlayerOneShotEncoding
     abstract getPlayerTwoShotEncoding: () => PlayerTwoShotEncoding
-    abstract getScore: () => number
-    versus = (opponent: Shot) => this.result[opponent.getName()];
-    getName = () => this.constructor.name
+    abstract drawAgainst: () => Shot
+
+    protected abstract _score: number
+
+    get score(): number {
+        return this._score
+    }
+
+    get name(): string {
+        return this.constructor.name
+    }
+
+    versus = (opponent: Shot) => this.result[opponent.name];
 }
 
 export class Rock extends Shot {
-    result = {'Rock': 3, 'Paper': 0, 'Scissors': 6}
-    getPlayerOneShotEncoding: () => PlayerOneShotEncoding = () => "A"
-    getPlayerTwoShotEncoding: () => PlayerTwoShotEncoding = () => "X"
-    getScore = () => 1
+    result = {'Rock': RoundResult.Draw, 'Paper': RoundResult.Lose, 'Scissors': RoundResult.Win}
+    protected _score = 1;
+    getPlayerOneShotEncoding = () => PlayerOneShotEncoding.Rock
+    getPlayerTwoShotEncoding = () => PlayerTwoShotEncoding.Rock
+
+    drawAgainst = (): Shot => new Rock()
+    loseAgainst = (): Shot => new Paper()
+    winAgainst = (): Shot => new Scissors()
 }
 
 export class Paper extends Shot {
-    result = {'Rock': 6, 'Paper': 3, 'Scissors': 0}
-    getPlayerOneShotEncoding: () => PlayerOneShotEncoding = () => "B"
-    getPlayerTwoShotEncoding: () => PlayerTwoShotEncoding = () => "Y"
-    getScore = () => 2
+    result = {'Rock': RoundResult.Win, 'Paper': RoundResult.Draw, 'Scissors': RoundResult.Lose}
+    protected _score = 2;
+    getPlayerOneShotEncoding = () => PlayerOneShotEncoding.Paper
+    getPlayerTwoShotEncoding = () => PlayerTwoShotEncoding.Paper
+    drawAgainst = (): Shot => new Paper()
+    loseAgainst = (): Shot => new Scissors()
+    winAgainst = (): Shot => new Rock()
 }
 
 export class Scissors extends Shot {
-    result = {'Rock': 0, 'Paper': 6, 'Scissors': 3}
-    getPlayerOneShotEncoding: () => PlayerOneShotEncoding = () => "C"
-    getPlayerTwoShotEncoding: () => PlayerTwoShotEncoding = () => "Z"
-    getScore = () => 3
+    result = {'Rock': RoundResult.Lose, 'Paper': RoundResult.Win, 'Scissors': RoundResult.Draw}
+    protected _score = 3;
+    getPlayerOneShotEncoding = () => PlayerOneShotEncoding.Scissors
+    getPlayerTwoShotEncoding = () => PlayerTwoShotEncoding.Scissors
+    drawAgainst = (): Shot => new Scissors()
+    loseAgainst = (): Shot => new Rock()
+    winAgainst = (): Shot => new Paper()
 }
-
 
 export class Round {
     private readonly _myShot: Shot;
@@ -42,7 +81,7 @@ export class Round {
     }
 
     get score(): number {
-        return this._myShot.getScore() +
+        return this._myShot.score +
             this.myShot.versus(this._opponentShot)
     }
 
@@ -54,6 +93,9 @@ export class Round {
         return this._myShot;
     }
 
+    get myResult(): string {
+        return RoundResult[this._myShot.versus(this._opponentShot)]
+    }
 }
 
 export class Strategy {
@@ -75,5 +117,6 @@ export class Strategy {
         return this.rounds.map((round) => round.myShot)
     }
 
-    getRoundScore = (roundNumber: number) => this.rounds[roundNumber].score
+    getRoundScore = (roundNumber: number) => <RoundResult>this.rounds[roundNumber].score
+    getRoundResult = (roundNumber: number) => this.rounds[roundNumber].myResult
 }

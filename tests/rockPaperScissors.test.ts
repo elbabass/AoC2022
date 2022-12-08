@@ -1,5 +1,5 @@
 import {Strategy} from "../src/rockPaperScissors";
-import {parseStrategy} from "../src/strategyParser";
+import {parseCorrectStrategy, parseStrategy} from "../src/strategyParser";
 import {readFileSync} from "fs";
 
 require('approvals').mocha(__dirname + '/day2')
@@ -8,6 +8,12 @@ describe('Elves playing Rock Paper Scissors', () => {
     it('can read strategy to compute score', function () {
         const rounds = parseStrategy(day2Example)
         const description = day2Introduction + day2ExampleExplained(day2Example, rounds)
+        this.verify(description);
+    })
+
+    it('can read correct strategy to compute score', function () {
+        const rounds = parseCorrectStrategy(day2Example)
+        const description = day2Part2(rounds)
         this.verify(description);
     })
 
@@ -36,19 +42,37 @@ const day2ExampleExplained = (input: string, rounds: Strategy) => {
         "This strategy guide predicts and recommends the following:\n" +
         "\n" +
         "In the first round, your opponent will choose" +
-        ` ${opponentShots[0].getName()} (${opponentShots[0].getPlayerOneShotEncoding()}),` +
-        ` and you should choose ${myShots[0].getName()} (${myShots[0].getPlayerTwoShotEncoding()}).` +
+        ` ${opponentShots[0].name} (${opponentShots[0].getPlayerOneShotEncoding()}),` +
+        ` and you should choose ${myShots[0].name} (${myShots[0].getPlayerTwoShotEncoding()}).` +
         ` This ends in a win for you with a score of ${rounds.getRoundScore(0)}` +
-        ` (${myShots[0].getScore()} because you chose ${myShots[0].getName()} + ${myShots[0].versus(opponentShots[0])} because you won).\n` +
+        ` (${myShots[0].score} because you chose ${myShots[0].name} + ${myShots[0].versus(opponentShots[0])} because you won).\n` +
         "In the second round, your opponent will choose" +
-        ` ${opponentShots[1].getName()} (${opponentShots[1].getPlayerOneShotEncoding()}),` +
-        ` and you should choose ${myShots[1].getName()} (${myShots[1].getPlayerTwoShotEncoding()}).` +
-        ` This ends in a loss for you with a score of ${rounds.getRoundScore(1)} (${myShots[1].getScore()} + ${myShots[1].versus(opponentShots[1])}).\n` +
-        `The third round is a draw with both players choosing ${opponentShots[2].getName()},` +
-        ` giving you a score of ${myShots[2].getScore()} + ${myShots[2].versus(opponentShots[2])} = ${rounds.getRoundScore(2)}.\n` +
+        ` ${opponentShots[1].name} (${opponentShots[1].getPlayerOneShotEncoding()}),` +
+        ` and you should choose ${myShots[1].name} (${myShots[1].getPlayerTwoShotEncoding()}).` +
+        ` This ends in a loss for you with a score of ${rounds.getRoundScore(1)} (${myShots[1].score} + ${myShots[1].versus(opponentShots[1])}).\n` +
+        `The third round is a draw with both players choosing ${opponentShots[2].name},` +
+        ` giving you a score of ${myShots[2].score} + ${myShots[2].versus(opponentShots[2])} = ${rounds.getRoundScore(2)}.\n` +
         "In this example, if you were to follow the strategy guide, you would get a total score of" +
         ` ${rounds.totalScore} (${rounds.getRoundScore(0)} + ${rounds.getRoundScore(1)} + ${rounds.getRoundScore(2)}).`
 }
+
+const day2Part2 = (rounds: Strategy) => "--- Part Two ---\n" +
+    "The Elf finishes helping with the tent and sneaks back over to you." +
+    " \"Anyway, the second column says how the round needs to end: X means you need to lose," +
+    " Y means you need to end the round in a draw, and Z means you need to win. Good luck!\"\n" +
+    "\n" +
+    "The total score is still calculated in the same way, but now you need to figure out what shape to" +
+    " choose so the round ends as indicated. The example above now goes like this:\n" +
+    "\n" +
+    `In the first round, your opponent will choose ${rounds.opponentShots[0].name} (${rounds.opponentShots[0].getPlayerOneShotEncoding()}),` +
+    ` and you need the round to end in a ${rounds.getRoundResult(0).toLowerCase()} (Y),` +
+    ` so you also choose Rock. This gives you a score of ${rounds.myShots[0].score} + ${rounds.myShots[0].versus(rounds.opponentShots[0])} = ${rounds.getRoundScore(0)}.\n` +
+    `In the second round, your opponent will choose ${rounds.opponentShots[1].name} (${rounds.opponentShots[1].getPlayerOneShotEncoding()}),` +
+    ` and you choose Rock so you ${rounds.getRoundResult(1).toLowerCase()} (X) with a score of ${rounds.myShots[1].score} + ${rounds.myShots[1].versus(rounds.opponentShots[1])} = ${rounds.getRoundScore(1)}.\n` +
+    "In the third round," +
+    ` you will defeat your opponent's ${rounds.opponentShots[2].name} with ${rounds.myShots[2].name} for a score of ${rounds.myShots[2].score} + ${rounds.myShots[2].versus(rounds.opponentShots[2])} = ${rounds.getRoundScore(2)}.\n` +
+    "Now that you're correctly decrypting the ultra top secret strategy guide," +
+    ` you would get a total score of ${rounds.totalScore}.`
 
 const day2InputExplained = (input: string, rounds: Strategy) => {
     return "What would your total score be if everything goes exactly according to your strategy guide?\n" +
