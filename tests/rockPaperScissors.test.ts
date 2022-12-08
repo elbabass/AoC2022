@@ -1,15 +1,20 @@
 import {Strategy} from "../src/rockPaperScissors";
 import {parseStrategy} from "../src/strategyParser";
+import {readFileSync} from "fs";
 
 require('approvals').mocha(__dirname + '/day2')
-
 
 describe('Elves playing Rock Paper Scissors', () => {
     it('can read strategy to compute score', function () {
         const rounds = parseStrategy(day2Example)
-        const description =
-            day2Introduction +
-            day2ExampleExplained(day2Example, rounds)
+        const description = day2Introduction + day2ExampleExplained(day2Example, rounds)
+        this.verify(description);
+    })
+
+    it('can read strategy to compute score with day 2 input', function () {
+        const day2Inputs = readFileSync(__dirname + "/Day2/day2.input.txt", 'utf-8')
+        const rounds = parseStrategy(day2Inputs)
+        const description = day2InputExplained(day2Inputs, rounds)
         this.verify(description);
     })
 })
@@ -43,6 +48,20 @@ const day2ExampleExplained = (input: string, rounds: Strategy) => {
         ` giving you a score of ${myShots[2].getScore()} + ${myShots[2].versus(opponentShots[2])} = ${rounds.getRoundScore(2)}.\n` +
         "In this example, if you were to follow the strategy guide, you would get a total score of" +
         ` ${rounds.totalScore} (${rounds.getRoundScore(0)} + ${rounds.getRoundScore(1)} + ${rounds.getRoundScore(2)}).`
+}
+
+const day2InputExplained = (input: string, rounds: Strategy) => {
+    return "What would your total score be if everything goes exactly according to your strategy guide?\n" +
+        "\n" +
+        "To begin, get your puzzle input." +
+        "\n-----" +
+        "\n" +
+        input +
+        "\n-----" +
+        "\n" +
+        "This strategy guide predicts and recommends the following:\n" +
+        "\n" +
+        ` ${rounds.totalScore}.`
 }
 
 const day2Introduction = "--- Day 2: Rock Paper Scissors ---\n" +
