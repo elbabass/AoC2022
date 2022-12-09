@@ -1,28 +1,14 @@
 // import {readFileSync} from "fs";
 
+import {caseOf, parseRucksack, Rucksack, totalPriority} from "../src/rucksack";
+
 require('approvals').mocha(__dirname + '/day3')
 
-class Rucksack {
-    constructor(content: string) {
-        this._content = content
-    }
-
-    private _content: string;
-
-    get content(): string {
-        return this._content;
-    }
-
-}
-
 describe('Rucksack Reorganization', () => {
-
     it('priority sum', function () {
-        new Array<Rucksack>(
-            new Rucksack("vJrwpWtwJgWrhcsFMMfFFhFp")
-        );
+        const rucksacks = parseRucksack(day2Example)
         const description = day3Introduction +
-            day3ExampleExplained(day2Example)
+            day3ExampleExplained(day2Example, rucksacks)
         this.verify(description)
     })
 })
@@ -34,7 +20,7 @@ const day2Example = "vJrwpWtwJgWrhcsFMMfFFhFp\n" +
     "ttgJtRGJQctTZtZT\n" +
     "CrZsJsPPZsGzwwsLwLmpwMDw\n"
 
-const day3ExampleExplained = (input: string) => {
+const day3ExampleExplained = (input: string, rucksacks: Rucksack[]) => {
     return "For example, suppose you have the following list of contents from six rucksacks:\n" +
         "\n" +
         "----\n" +
@@ -42,55 +28,55 @@ const day3ExampleExplained = (input: string) => {
         "\n" +
         "----\n" +
         "- The first rucksack contains the items " +
-        "vJrwpWtwJgWrhcsFMMfFFhFp" +
+        rucksacks[0].content +
         ", which means its first compartment contains the items " +
-        "vJrwpWtwJgWr" +
+        rucksacks[0].firstCompartment +
         ", while the second compartment contains the items " +
-        "hcsFMMfFFhFp" +
+        rucksacks[0].secondCompartment +
         ". The only item type that appears in both compartments is " +
-        "lowercase p" +
+        caseOf(rucksacks[0].commonElement) + " " + rucksacks[0].commonElement +
         ".\n" +
         "- The second rucksack's compartments contain " +
-        "jqHRNqRjqzjGDLGL" +
+        rucksacks[1].firstCompartment +
         " and " +
-        "rsFMfFZSrLrFZsSL" +
+        rucksacks[1].secondCompartment +
         ". The only item type that appears in both compartments is " +
-        "uppercase L" +
+        caseOf(rucksacks[1].commonElement) + " " + rucksacks[1].commonElement +
         ".\n" +
         "- The third rucksack's compartments contain " +
-        "PmmdzqPrV" +
+        rucksacks[2].firstCompartment +
         " and " +
-        "vPwwTWBwg" +
+        rucksacks[2].secondCompartment +
         "; the only common item type is " +
-        "uppercase P" +
+        caseOf(rucksacks[2].commonElement) + " " + rucksacks[2].commonElement +
         ".\n" +
         "- The fourth rucksack's compartments only share item type " +
-        "v" +
+        rucksacks[3].commonElement +
         ".\n" +
         "- The fifth rucksack's compartments only share item type " +
-        "t" +
+        rucksacks[4].commonElement +
         ".\n" +
         "- The sixth rucksack's compartments only share item type " +
-        "s" +
+        rucksacks[5].commonElement +
         ".\n" +
         "To help prioritize item rearrangement, every item type can be converted to a priority:\n" +
         "\n" +
         "- Lowercase item types a through z have priorities 1 through 26.\n" +
         "- Uppercase item types A through Z have priorities 27 through 52.\n" +
         "In the above example, the priority of the item type that appears in both compartments of each rucksack is " +
-        "16 (p)" +
+        rucksacks[0].priority + " (" + rucksacks[0].commonElement + ")" +
         ", " +
-        "38 (L)" +
+        rucksacks[1].priority + " (" + rucksacks[1].commonElement + ")" +
         ", " +
-        "42 (P)" +
+        rucksacks[2].priority + " (" + rucksacks[2].commonElement + ")" +
         ", " +
-        "22 (v)" +
+        rucksacks[3].priority + " (" + rucksacks[3].commonElement + ")" +
         ", " +
-        "20 (t)" +
+        rucksacks[4].priority + " (" + rucksacks[4].commonElement + ")" +
         ", and " +
-        "19 (s)" +
+        rucksacks[5].priority + " (" + rucksacks[5].commonElement + ")" +
         "; the sum of these is " +
-        "157" +
+        totalPriority(rucksacks) +
         "."
 }
 
