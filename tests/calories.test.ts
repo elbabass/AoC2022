@@ -42,10 +42,10 @@ describe('Elves holding calories', () => {
         "\n" +
         "10000"
 
-    const itemCaloriesWritingsInputDay1 = readFileSync(__dirname + "/Day1/day1.input.txt", 'utf-8')
+    const itemCaloriesWritingsInputDay1 = readFileSync(__dirname + "/day1/day1.input.txt", 'utf-8')
 
-    const caloriesCounterForExample = new CaloriesCounter(itemCaloriesWritingsExample);
-    const caloriesCounterForDay1 = new CaloriesCounter(itemCaloriesWritingsInputDay1);
+    const caloriesCounterForExample = new CaloriesCounter(itemCaloriesWritingsExample)
+    const caloriesCounterForDay1 = new CaloriesCounter(itemCaloriesWritingsInputDay1)
 
     it('have one holding the most calories', function () {
         const mostCalories = caloriesCounterForExample.topCalorieBags()

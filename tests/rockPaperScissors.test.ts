@@ -10,25 +10,25 @@ describe('Elves playing Rock Paper Scissors', () => {
     it('can read strategy to compute score', function () {
         const rounds = collectStrategy(new ShotAndShotVisitor(), day2Example)
         const description = day2Introduction + day2ExampleExplained(day2Example, rounds)
-        this.verify(description);
+        this.verify(description)
     })
 
     it('can read correct strategy to compute score', function () {
         const rounds = collectStrategy(new ShotAndResultVisitor(), day2Example)
         const description = day2Part2(rounds)
-        this.verify(description);
+        this.verify(description)
     })
 
     it('can read strategy to compute score with day 2 input', function () {
         const rounds = collectStrategy(new ShotAndShotVisitor(), day2Inputs)
         const description = day2InputExplained(day2Inputs, rounds)
-        this.verify(description);
+        this.verify(description)
     })
 
     it('can read correct strategy to compute score with day 2 input\'', function () {
         const rounds = collectStrategy(new ShotAndResultVisitor(), day2Inputs)
         const description = day2Part2(rounds)
-        this.verify(description);
+        this.verify(description)
     })
 })
 
