@@ -1,19 +1,40 @@
 // import {readFileSync} from "fs";
 
 import {caseOf, parseRucksack, Rucksack, totalPriority} from "../src/rucksack";
+import {getInputDay} from "./helper";
 
 require('approvals').mocha(__dirname + '/day3')
 
 describe('Rucksack Reorganization', () => {
     it('priority sum', function () {
-        const rucksacks = parseRucksack(day2Example)
+        const rucksacks = parseRucksack(day3Example)
         const description = day3Introduction +
-            day3ExampleExplained(day2Example, rucksacks)
+            day3ExampleExplained(day3Example, rucksacks)
+        this.verify(description)
+    })
+
+    it('priority sum with day 3 input', function () {
+        const rucksacks = parseRucksack(day3Input)
+
+        const description = day3InputExplained(day3Input, rucksacks)
+
         this.verify(description)
     })
 })
 
-const day2Example = "vJrwpWtwJgWrhcsFMMfFFhFp\n" +
+function day3InputExplained(day3Input: string, rucksacks: Rucksack[]) {
+    return "With the input of the day being:\n" +
+        "----\n" +
+        day3Input +
+        "\n" +
+        "----\n" +
+        "Total priority is:" +
+        totalPriority(rucksacks)
+}
+
+const day3Input = getInputDay(3)
+
+const day3Example = "vJrwpWtwJgWrhcsFMMfFFhFp\n" +
     "jqHRNqRjqzjGDLGLrsFMfFZSrLrFZsSL\n" +
     "PmmdzqPrVvPwwTWBwg\n" +
     "wMqvLMZHhHMvwLHjbvcjnnSBnvTQFn\n" +

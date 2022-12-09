@@ -1,11 +1,11 @@
 import {Strategy} from "../src/rockPaperScissors";
 import {collectStrategy, ShotAndResultVisitor, ShotAndShotVisitor} from "../src/strategyParser";
-import {readFileSync} from "fs";
+import {getInputDay} from "./helper";
 
 require('approvals').mocha(__dirname + '/day2')
 
 describe('Elves playing Rock Paper Scissors', () => {
-    const day2Inputs = readFileSync(__dirname + "/Day2/day2.input.txt", 'utf-8')
+    const day2Inputs = getInputDay(2)
 
     it('can read strategy to compute score', function () {
         const rounds = collectStrategy(new ShotAndShotVisitor(), day2Example)

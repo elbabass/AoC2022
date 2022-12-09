@@ -1,6 +1,6 @@
 import {InventoryItem} from "../src/foodInventory/inventoryItem";
 import {CaloriesCounter} from '../src/foodInventory/caloriesCounter'
-import {readFileSync} from 'fs';
+import {getInputDay} from "./helper";
 
 require('approvals').mocha(__dirname + '/day1')
 
@@ -42,7 +42,7 @@ describe('Elves holding calories', () => {
         "\n" +
         "10000"
 
-    const itemCaloriesWritingsInputDay1 = readFileSync(__dirname + "/day1/day1.input.txt", 'utf-8')
+    const itemCaloriesWritingsInputDay1 = getInputDay(1)
 
     const caloriesCounterForExample = new CaloriesCounter(itemCaloriesWritingsExample)
     const caloriesCounterForDay1 = new CaloriesCounter(itemCaloriesWritingsInputDay1)

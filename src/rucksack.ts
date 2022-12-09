@@ -12,9 +12,12 @@ export class Rucksack {
     }
 
     get commonElement(): string {
-        return this.firstCompartment
+        const commonChar = this.firstCompartment
             .split("")
-            .filter(c => this.secondCompartment.includes(c))[0]
+            .filter(c => this.secondCompartment.includes(c))[0];
+        if (commonChar == undefined)
+            console.log("VVV Error with " + this._content)
+        return commonChar
     }
 
     private _content: string;
@@ -33,10 +36,16 @@ export class Rucksack {
     }
 }
 
-export const totalPriority = (rucksacks: Rucksack[]): number => 157
+export const totalPriority = (rucksacks: Rucksack[]): number =>
+    rucksacks
+        .map(rucksack => rucksack.priority)
+        .reduce((total, priority) =>
+            total + priority)
 
 export const parseRucksack = (input: string): Rucksack[] =>
-    input.split("\n").map(content => new Rucksack(content))
+    input.split("\n")
+        .filter(content => content != "")
+        .map(content => new Rucksack(content))
 
 export const caseOf = (c: string): string =>
     c.match(/[a-z]/) ? "lowercase" : "uppercase"
