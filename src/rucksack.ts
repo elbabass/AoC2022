@@ -1,3 +1,10 @@
+function badgePriority(commonElement: string) {
+    if (commonElement.match(/[a-z]/))
+        return commonElement.charCodeAt(0) - "a".charCodeAt(0) + 1
+    else
+        return commonElement.charCodeAt(0) - "A".charCodeAt(0) + 27
+}
+
 export class Rucksack {
     constructor(content: string) {
         this._content = content
@@ -11,28 +18,20 @@ export class Rucksack {
         return this._content.slice(this._content.length / 2)
     }
 
-    get commonElement(): string {
-        const commonChar = this.firstCompartment
-            .split("")
-            .filter(c => this.secondCompartment.includes(c))[0];
-        if (commonChar == undefined)
-            console.log("VVV Error with " + this._content)
-        return commonChar
-    }
+    private readonly _content: string;
 
-    private _content: string;
+    get commonElement(): string {
+        return this.firstCompartment
+            .split("")
+            .filter(c => this.secondCompartment.includes(c))[0]
+    }
 
     get content(): string {
         return this._content
     }
 
     get priority(): number {
-        const commonElement = this.commonElement
-        if (commonElement.match(/[a-z]/))
-            return commonElement.charCodeAt(0) - "a".charCodeAt(0) + 1
-        else
-            return commonElement.charCodeAt(0) - "A".charCodeAt(0) + 27
-
+        return badgePriority(this.commonElement);
     }
 }
 
@@ -54,6 +53,17 @@ export class RucksackGroup {
             this.rucksack3.content + "\n"
     }
 
+    get badge(): string {
+        return this.rucksack.content
+            .split("")
+            .filter(c => this.rucksack2.content.includes(c))
+            .filter(c => this.rucksack3.content.includes(c))[0]
+    }
+
+    get priority(): number {
+        return badgePriority(this.badge);
+    }
+
 }
 
 export const totalPriority = (rucksacks: Rucksack[]): number =>
@@ -61,6 +71,11 @@ export const totalPriority = (rucksacks: Rucksack[]): number =>
         .map(rucksack => rucksack.priority)
         .reduce((total, priority) =>
             total + priority)
+
+export const totalPriorityByGroup = (rucksackGroups: RucksackGroup[]): number =>
+    rucksackGroups
+        .map(rucksackGroup => rucksackGroup.priority)
+        .reduce((total, priority) => total + priority)
 
 
 const collectRucksackGroups = (rucksacks: Rucksack[]): Array<RucksackGroup> => {

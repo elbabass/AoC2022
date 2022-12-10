@@ -1,6 +1,14 @@
 // import {readFileSync} from "fs";
 
-import {caseOf, parseRucksack, parseRucksackGroups, Rucksack, RucksackGroup, totalPriority} from "../src/rucksack";
+import {
+    caseOf,
+    parseRucksack,
+    parseRucksackGroups,
+    Rucksack,
+    RucksackGroup,
+    totalPriority,
+    totalPriorityByGroup
+} from "../src/rucksack";
 import {getInputDay} from "./helper";
 
 require('approvals').mocha(__dirname + '/day3')
@@ -22,6 +30,12 @@ describe('Rucksack Reorganization', () => {
     it('priority sum by group with day 3 example', function () {
         const rucksackGroups = parseRucksackGroups(day3Example)
         const description = day3Part2Explained(day3Input, rucksackGroups)
+        this.verify(description)
+    })
+
+    it('priority sum by group with day 3 input', function () {
+        const rucksackGroups = parseRucksackGroups(day3Input)
+        const description = day3Part2WithInputs(rucksackGroups)
         this.verify(description)
     })
 })
@@ -141,22 +155,32 @@ const day3Part2Explained = (day3Input: string, rucksackGroups: RucksackGroup[]) 
     rucksackGroups[1].content +
     "----\n" +
     "In the first group, the only item type that appears in all three" +
-    " rucksacks is lowercase r; this must be their badges." +
+    " rucksacks is " +
+    caseOf(rucksackGroups[0].badge) + " " + rucksackGroups[0].badge +
+    "; this must be their badges." +
     " In the second group, their badge item type must be " +
-    "Z" +
+    rucksackGroups[1].badge +
     ".\n" +
     "\n" +
     "Priorities for these items must still be found to organize the sticker" +
     " attachment efforts: here, they are " +
-    "18 (r)" +
+    rucksackGroups[0].priority + " (" + rucksackGroups[0].badge + ")" +
     " for the first group and " +
-    "52 (Z)" +
+    rucksackGroups[1].priority + " (" + rucksackGroups[1].badge + ")" +
     " for the second group." +
     " The sum of these is " +
-    "70" +
+    totalPriorityByGroup(rucksackGroups) +
     ".\n" +
     "\n" +
     "Find the item type that corresponds to the badges of each three-Elf group."
+
+
+const day3Part2WithInputs = (rucksackGroups: Array<RucksackGroup>): string =>
+    "Find the item type that corresponds to the badges of each three-Elf group." +
+    " What is the sum of the priorities of those item types?\n" +
+    "\n" +
+    "Answer:" +
+    totalPriorityByGroup(rucksackGroups)
 
 const day3Introduction = "--- Day 3: Rucksack Reorganization ---\n" +
     "One Elf has the important job of loading all of the rucksacks with supplies for the jungle journey." +
